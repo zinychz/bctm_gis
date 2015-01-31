@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+                       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+                       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+                       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd">
+
+	<context:component-scan base-package="gis" />
+	<context:annotation-config />
+
+
+	<bean
+		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName">
+			<!--<value>oracle.jdbc.driver.OracleDriver</value> -->
+			<value>com.mysql.jdbc.Driver</value>
+		</property>
+		<property name="url">
+			<!--<value>jdbc:oracle:thin:@localhost:1521:orcl</value> -->
+			<!--<value>jdbc:mysql://192.168.59.2:3306/gis?useUnicode=yes&amp;characterEncoding=UTF-8</value> -->
+			<!--<value>jdbc:mysql://localhost:3306/gis?useUnicode=yes&amp;characterEncoding=UTF-8</value> -->
+			<value>jdbc:mysql://127.5.187.130:3306/gis?useUnicode=yes&amp;characterEncoding=UTF-8</value>
+		</property>
+		<property name="username">
+			<!--<value>scott</value> -->
+			<value>adminHeadpGB</value>
+			<!--<value>root</value> -->
+		</property>
+		<property name="password">
+			<!--<value>scott</value> -->
+			<value>whlIYk5WxTpc</value>
+			<!--<value>root</value> -->
+		</property>
+	</bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:/hibernate.cfg.xml" />
+		<property name="hibernateProperties">
+			<props>
+				<!--<prop key="hibernate.dialect">org.hibernate.dialect.OracleDialect</prop> -->
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">false</prop>
+				<prop key="hibernate.hbm2ddl.auto">validate</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<tx:annotation-driven />
+
+	<bean id="gisGraphsDao" class="gis.orm.GisgraphsHibernateDao" />
+	<bean id="inventoriesDao" class="gis.orm.InventoriesHibernateDao" />
+	<bean id="personDao" class="gis.orm.PersonHibernateDao" />
+	<bean id="divisionDao" class="gis.orm.DivisionHibernateDao" />
+	<bean id="routePropertyDao" class="gis.orm.RoutePropertyHibernateDao" />
+	<bean id="routeTypeDao" class="gis.orm.RouteTypeHibernateDao" />
+	<bean id="insulationDao" class="gis.orm.InsulationHibernateDao" />
+	<bean id="trayDao" class="gis.orm.TrayHibernateDao" />
+	<bean id="routeItemDao" class="gis.orm.RouteItemHibernateDao" />
+	<bean id="measureDao" class="gis.orm.MeasureHibernateDao" />
+	<bean id="materialDao" class="gis.orm.MaterialHibernateDao" />
+
+	<bean id="boilerTypeDao" class="gis.orm.BoilerTypeHibernateDao" />
+	<bean id="boilerPropertyDao" class="gis.orm.BoilerPropertyHibernateDao" />
+	<bean id="checkPeriodDao" class="gis.orm.CheckPeriodHibernateDao" />
+	<bean id="boilerItemDao" class="gis.orm.BoilerItemHibernateDao" />
+
+</beans>

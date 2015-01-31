@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Insert title here</title>
+</head>
+<body>
+
+	<ui:composition>
+
+		<h:panelGrid columns="2">
+			<h:inputText value="#{mapFind.matchesName}" id="matchesName" />
+			<h:commandButton id="findButton" value="Найти">
+				<a4j:ajax status="ajaxStatus" execute="caseSensitive matchesName"
+					render="foundTree" />
+			</h:commandButton>
+
+			<h:outputText value="Учитывать регистр" />
+			<h:selectBooleanCheckbox id="caseSensitive"
+				value="#{mapFind.caseSensitive}" />
+		</h:panelGrid>
+
+		<div style="height: 66%; overflow: auto;" id="divFindTree">
+			<rich:tree id="foundTree" nodeType="#{node.type}" var="node"
+				status="ajaxStatus" value="#{mapFind.rootNodes}" toggleType="ajax"
+				selectionType="client">
+				<rich:treeNode iconClass="displayNone" type="gisgraph">
+					<h:outputLink value="#"
+						onclick="getShapeFromLinkAndFocus('mf#{node.gisgraphId}'); return false;">
+						#{node.name}
+					</h:outputLink>
+				</rich:treeNode>
+				<rich:treeNode iconLeaf="org.richfaces/node_icon.gif"
+					iconClass="rf-trn-ico" type="objectInGroup">
+                    #{node.name}
+                </rich:treeNode>
+				<rich:treeNode iconLeaf="org.richfaces/node_icon.gif"
+					iconClass="rf-trn-ico" type="group">
+					#{node.name}
+                </rich:treeNode>
+			</rich:tree>
+		</div>
+
+	</ui:composition>
+
+</body>
+</html>

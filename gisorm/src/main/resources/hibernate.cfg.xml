@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<mapping class="gis.orm.Gisgraphs" />
+		<mapping class="gis.orm.Inventories" />
+		<mapping class="gis.orm.Person" />
+		<mapping class="gis.orm.Division" />
+		<mapping class="gis.orm.RouteProperty" />
+		<mapping class="gis.orm.RouteType" />
+		<mapping class="gis.orm.Insulation" />
+		<mapping class="gis.orm.Tray" />
+		<mapping class="gis.orm.RouteItem" />
+		<mapping class="gis.orm.Measure" />
+		<mapping class="gis.orm.Material" />
+		<mapping class="gis.orm.BoilerType" />
+		<mapping class="gis.orm.BoilerProperty" />
+		<mapping class="gis.orm.CheckPeriod" />
+		<mapping class="gis.orm.BoilerItem" />
+	</session-factory>
+</hibernate-configuration>

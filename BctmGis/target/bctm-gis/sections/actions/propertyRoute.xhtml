@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Insert title here</title>
+</head>
+<body>
+
+	<ui:composition>
+
+		<h:panelGroup layout="block"
+			rendered="#{not empty specFind.currentInventory and specFind.currentInventory.magistral gt 0}">
+			<div style="width: 100%;">
+				<fieldset
+					style="margin: 3px; padding-top: 0; border: 1px solid #ddd;">
+					<legend>Технич. хар-ки</legend>
+					<table style="width: 100%;">
+						<tr>
+
+							<td class="labelGrid">Кол. труб:</td>
+							<td class="valueGrid">#{routeProperty.currentRouteProperty.pipecount}</td>
+
+							<td class="labelGrid">Пролегание:</td>
+							<td class="valueGrid"><h:selectOneMenu
+									value="#{routeProperty.currentRouteProperty.routeType.name}"
+									style="width:100%;">
+									<f:selectItems value="#{routeProperty.allRouteTypeList}" />
+								</h:selectOneMenu></td>
+
+						</tr>
+						<tr>
+
+							<td class="labelGrid">Глубина(м):</td>
+							<td class="valueGrid">#{routeProperty.currentRouteProperty.depth}</td>
+
+							<td class="labelGrid">Лоток:</td>
+							<td class="valueGrid"><h:selectOneMenu
+									value="#{routeProperty.currentRouteProperty.tray.name}"
+									style="width:100%;">
+									<f:selectItems value="#{routeProperty.allTrayList}" />
+								</h:selectOneMenu></td>
+
+						</tr>
+						<tr>
+
+							<td class="labelGrid">Толщина(мм):</td>
+							<td class="valueGrid">#{routeProperty.currentRouteProperty.width}</td>
+
+							<td class="labelGrid">Изоляция:</td>
+							<td class="valueGrid"><h:selectOneMenu
+									value="#{routeProperty.currentRouteProperty.insulation.name}"
+									style="width:100%;">
+									<f:selectItems value="#{routeProperty.allInsulationList}" />
+								</h:selectOneMenu></td>
+
+						</tr>
+					</table>
+				</fieldset>
+				<fieldset
+					style="margin: 3px; padding-top: 0; border: 1px solid #ddd;">
+					<legend>Примечания</legend>
+					<div style="overflow: auto;">
+						<h:inputTextarea
+							value="#{routeProperty.currentRouteProperty.remark}" rows="3"
+							style="width:98%;" />
+					</div>
+				</fieldset>
+			</div>
+
+			<fieldset
+				style="margin: 3px; padding-top: 0; border: 1px solid #ddd;">
+				<legend>Составляющие</legend>
+
+				<rich:extendedDataTable value="#{routeProperty.routeItems}"
+					var="routeItem" id="tableRouteItems" frozenColumns="1"
+					selectionMode="single">
+					<f:facet name="noData">
+                		Нет данных
+            		</f:facet>
+					<rich:column width="120px">
+						<f:facet name="header">
+							<h:outputText value="Наименование" />
+						</f:facet>
+						<h:outputText value="#{routeItem.itemPk.material.name}" />
+					</rich:column>
+					<rich:column width="60px" styleClass="rightAlign">
+						<f:facet name="header">
+							<h:outputText value="Количество" />
+						</f:facet>
+						<h:outputText value="#{routeItem.quantity}" />
+					</rich:column>
+					<rich:column width="60px">
+						<f:facet name="header">
+							<h:outputText value="Единицы" />
+						</f:facet>
+						<h:outputText value="#{routeItem.itemPk.material.measure.name}" />
+					</rich:column>
+				</rich:extendedDataTable>
+			</fieldset>
+
+		</h:panelGroup>
+	</ui:composition>
+
+</body>
+</html>

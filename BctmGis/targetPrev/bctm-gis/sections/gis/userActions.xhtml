@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Insert title here</title>
+</head>
+<body>
+
+	<ui:composition>
+
+
+
+		<h:form prependId="false" id="currentObjectForm">
+
+			<h:inputHidden id="currentId" value="#{actions.currentId}" />
+			<h:commandButton style="display:none;" id="getShapeInfo" value="getShapeInfo">
+				<f:ajax execute="currentId"
+					render="currentId currentX currentY currentName"
+					onevent="setAnimate" />
+			</h:commandButton>
+
+			<h:panelGrid columns="2">
+				<h:panelGroup>
+					<h4>
+						<h:outputText value="Текущий объект:" />
+					</h4>
+				</h:panelGroup>
+				<h:commandLink id="currentName" value="#{actions.currentName}"
+					action="#{actions.focusOnShapeById(actions.currentId)}"
+					disabled="#{actions.invalidCurrent}">
+					<f:ajax execute="currentId"
+						render="currentId currentX currentY currentName"
+						onevent="focusOnShape">
+					</f:ajax>
+				</h:commandLink>
+			</h:panelGrid>
+		</h:form>
+
+		<h:form prependId="false" id="actionsForm">
+			<h:panelGrid columns="2">
+				<h:inputText value="#{actions.matchesName}" id="matchesName" />
+				<h:commandButton id="findButton" value="Найти">
+					<f:ajax execute="caseSensitive matchesName" render="foundTable" />
+				</h:commandButton>
+
+				<h:outputText value="Учитывать регистр" />
+				<h:selectBooleanCheckbox id="caseSensitive"
+					value="#{actions.caseSensitive}" />
+			</h:panelGrid>
+
+			<div style="overflow: auto; width: 100%; position: absolute; top: 25%; bottom: 5px;">
+				<h:dataTable id="foundTable" value="#{actions.foundGisgraphs}"
+					var="fnd">
+					<h:column>
+						<h:commandLink value="#{fnd.name}"
+							action="#{actions.focusOnShape(fnd)}">
+							<f:ajax render="currentId currentX currentY currentName"
+								onevent="focusOnShape">
+							</f:ajax>
+						</h:commandLink>
+					</h:column>
+				</h:dataTable>
+			</div>
+
+			<h:inputHidden id="currentX" value="#{actions.currentPoint.x}" />
+			<h:inputHidden id="currentY" value="#{actions.currentPoint.y}" />
+
+		</h:form>
+	</ui:composition>
+
+</body>
+</html>

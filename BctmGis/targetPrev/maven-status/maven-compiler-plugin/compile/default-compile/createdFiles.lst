@@ -1,0 +1,9 @@
+bctm\gis\mvc\RoutePropertyBean.class
+bctm\gis\mvc\MapFindBean.class
+bctm\FilterUTF8CharacterEncoding.class
+bctm\gis\mvc\SpecFindFilteringBean.class
+bctm\gis\mvc\UserActionsBean.class
+bctm\gis\mvc\GisBean.class
+bctm\gis\mvc\SpecFindBean.class
+bctm\gis\mvc\BoilerPropertyBean.class
+bctm\gis\mvc\GisController.class

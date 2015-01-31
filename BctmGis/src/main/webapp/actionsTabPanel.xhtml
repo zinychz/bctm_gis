@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Insert title here</title>
+</head>
+<body>
+
+	<ui:composition>
+
+		<h:inputHidden id="currentX" value="#{mapFind.currentPoint.x}" />
+		<h:inputHidden id="currentY" value="#{mapFind.currentPoint.y}" />
+		<h:inputHidden id="currentType" value="#{mapFind.currentType}" />
+		<h:inputHidden id="children" value="#{mapFind.children}" />
+
+		<h:form prependId="false" id="outerLinksForm">
+
+			<h:inputHidden id="outerLinks" value="#{actions.renderOuter}" />
+
+			<h:commandButton style="display:none;" id="outerLinksButton"
+				value="outerLinksButton">
+				<a4j:ajax status="ajaxStatus" execute="outerLinks"
+					render="userActionForm" />
+			</h:commandButton>
+
+		</h:form>
+
+		<h:form prependId="false" id="userActionForm" style="height: 100%;">
+
+			<rich:tabPanel style="height: 100%;" switchType="client">
+
+				<rich:tab contentClass="tabContentOut" style="height: 100%;"
+					header="Карта">
+					<ui:include src="sections/actions/currentMap.xhtml" />
+					<ui:include src="sections/actions/mapActions.xhtml" />
+				</rich:tab>
+
+				<rich:tab contentClass="tabContentOut" style="height: 100%;"
+					header="ТМЦ">
+
+					<rich:tabPanel style="height: 100%;" switchType="client">
+
+						<ui:include src="sections/actions/currentSpecial.xhtml" />
+
+						<rich:tab contentClass="tabContentIn" style="height: 100%;"
+							header="Поиск">
+							<ui:include src="sections/actions/specFindActions.xhtml" />
+						</rich:tab>
+
+						<rich:tab contentClass="tabContentIn" style="height: 100%;"
+							header="Характеристики">
+							<h:panelGroup id="propertySpecialGroup" layout="block">
+								<ui:include src="sections/actions/propertyRoute.xhtml" />
+								<ui:include src="sections/actions/propertyBoiler.xhtml" />
+							</h:panelGroup>
+						</rich:tab>
+
+					</rich:tabPanel>
+				</rich:tab>
+
+			</rich:tabPanel>
+
+		</h:form>
+
+	</ui:composition>
+
+</body>
+</html>

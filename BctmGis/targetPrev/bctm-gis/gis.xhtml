@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Схема теплосетей</title>
+</h:head>
+
+<h:body styleClass="bodyGis">
+
+	<ui:decorate template="/templates/gisDecorator.xhtml">
+
+		<div id="gisSlider" class="gisSlider">
+
+			<div id="userGisWindow" class="contentGis"
+				onmousedown="moveMap(event)" onmousemove="moveMap(event)"
+				onmouseup="moveMap(event)">
+
+				<svg width="100%" height="100%"> <g id="groupScale"
+					transform="translate(-700,-500) scale(1)"> <ui:repeat
+					value="#{gis.shapes}" var="shape">
+					<h:outputText value="#{shape}" escape="false" />
+				</ui:repeat> <ui:repeat value="#{gis.labels}" var="label">
+					<h:outputText value="#{label}" escape="false" />
+				</ui:repeat> <g id="animate" /> </g> </svg>
+
+			</div>
+
+			<div class="sideBar">
+				<ui:include src="userActionsPanel.xhtml"></ui:include>
+			</div>
+
+		</div>
+
+		<div class="zoomContainer">
+			<div onclick="zoom('zoomIn');" class="zoomIn">+</div>
+			<div onclick="zoom('zoomOut');" class="zoomOut">-</div>
+		</div>
+
+	</ui:decorate>
+
+	<h:outputScript library="javascript" name="gis.js" />
+
+</h:body>
+</html>

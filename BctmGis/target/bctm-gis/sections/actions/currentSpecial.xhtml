@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Insert title here</title>
+</head>
+<body>
+
+	<ui:composition>
+
+		<h:panelGroup id="currentInventoryPanelGroup" layout="block">
+			<fieldset
+				style="margin: 3px; padding-top: 0; border: 1px solid #ddd;">
+				<legend>Текущий объект ТМЦ #{specFind.dateupdateStr}</legend>
+
+				<h:panelGrid columns="2" style="margin:0; height: 15px;">
+					<h:outputText value="Автоматически искать на карте" />
+					<h:selectBooleanCheckbox id="synchronizedMap"
+						value="#{specFind.synchronizedMap}">
+						<f:ajax onevent="#{progressCursorAjax}" />
+						<a4j:ajax event="click" />
+					</h:selectBooleanCheckbox>
+				</h:panelGrid>
+
+				<div style="height: 80px; width: 100%;">
+
+					<h:panelGroup rendered="#{not empty specFind.currentInventory}"
+						layout="block" style="width: 100%;">
+
+						<table style="width: 100%;">
+							<tr>
+								<td class="labelGrid">Инв. №:</td>
+								<td class="valueGrid">#{specFind.currentInventory.id}</td>
+								<td class="labelGrid">Наименов.:</td>
+								<td class="valueGrid"><h:inputText
+										value="#{specFind.currentInventory.name}" readonly="true"
+										style="width:100%;" /></td>
+							</tr>
+							<tr>
+								<td class="labelGrid">Дата ввода:</td>
+								<td class="valueGrid">#{specFind.formatDate(specFind.currentInventory.commissioning)}</td>
+								<td class="labelGrid">Подраздел.:</td>
+								<td class="valueGrid"><h:selectOneMenu
+										value="#{specFind.currentInventory.division.name}"
+										style="width:100%;">
+										<f:selectItems value="#{specFind.allDivisionList}" />
+									</h:selectOneMenu></td>
+							</tr>
+							<tr>
+								<td class="labelGrid">Колич./Длина:</td>
+								<td class="valueGrid">#{specFind.currentInventory.value}</td>
+								<td class="labelGrid">МОЛ:</td>
+								<td class="valueGrid"><h:selectOneMenu
+										value="#{specFind.currentInventory.person.name}"
+										style="width:100%;">
+										<f:selectItems value="#{specFind.allPersonList}" />
+									</h:selectOneMenu></td>
+							</tr>
+							<tr>
+								<td class="labelGrid">Экспл.(мес.):</td>
+								<td class="valueGrid">#{specFind.currentInventory.lifetime}</td>
+								<td class="labelGrid">На карте:</td>
+								<td class="valueGrid"><h:outputLink value="#"
+										onclick="getShapeFromLinkAndFocus('mf#{specFind.currentInventory.gisgraph.id}'); return false;">
+						#{specFind.currentInventory.gisgraph.name}
+					</h:outputLink></td>
+							</tr>
+						</table>
+
+
+					</h:panelGroup>
+				</div>
+			</fieldset>
+		</h:panelGroup>
+	</ui:composition>
+
+</body>
+</html>

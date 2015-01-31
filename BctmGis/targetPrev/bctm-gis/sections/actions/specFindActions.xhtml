@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Insert title here</title>
+</head>
+<body>
+
+	<ui:composition>
+
+		<rich:extendedDataTable value="#{specFind.inventories}"
+			var="inventory" id="tableInventories" frozenColumns="2"
+			selectionMode="single" clientRows="#{specFind.clientRows}"
+			onrowclick="setCurrentInventoryId('sf#{inventory.id}');">
+			<f:facet name="noData">
+                Не найдено
+            </f:facet>
+			<rich:column width="60px" styleClass="rightAlign"
+				filterValue="#{specFindFilteringBean.inventoryIdFilter}"
+				filterExpression="#{fn:startsWith(inventory.id, specFindFilteringBean.inventoryIdFilter)}"
+				filterType="custom">
+				<f:facet name="header">
+					<h:panelGroup>
+						<h:outputText value="Инв. №" />
+						<h:inputText value="#{specFindFilteringBean.inventoryIdFilter}"
+							styleClass="rightAlign" label="Inventory Id Filter" size="3"
+							title="После ввода нажмите TAB">
+							<a4j:ajax event="blur" render="tableInventories" execute="@this"
+								status="ajaxStatus" />
+						</h:inputText>
+					</h:panelGroup>
+				</f:facet>
+				<h:outputText value="#{inventory.id}" />
+			</rich:column>
+			<rich:column width="100px"
+				filterValue="#{specFindFilteringBean.inventoryNameFilter}"
+				filterExpression="#{fn:containsIgnoreCase(inventory.name, specFindFilteringBean.inventoryNameFilter)}"
+				filterType="custom">
+				<f:facet name="header">
+					<h:panelGroup>
+						<h:outputText value="Наименование" />
+						<h:inputText value="#{specFindFilteringBean.inventoryNameFilter}"
+							label="Inventory Name Filter" size="15"
+							title="После ввода нажмите TAB">
+							<a4j:ajax event="blur" render="tableInventories" execute="@this"
+								status="ajaxStatus" />
+						</h:inputText>
+					</h:panelGroup>
+				</f:facet>
+				<h:outputText value="#{inventory.name}" />
+			</rich:column>
+			<rich:column width="100px"
+				filterValue="#{specFindFilteringBean.inventoryDivisionFilter}"
+				filterExpression="#{fn:containsIgnoreCase(inventory.division.name, specFindFilteringBean.inventoryDivisionFilter)}"
+				filterType="custom">
+				<f:facet name="header">
+					<h:panelGroup>
+						<h:outputText value="Подразделение" />
+						<h:selectOneMenu
+							value="#{specFindFilteringBean.inventoryDivisionFilter}">
+							<f:selectItems value="#{specFind.allDivisionList}" />
+							<a4j:ajax render="tableInventories" execute="@this"
+								event="change" status="ajaxStatus" />
+						</h:selectOneMenu>
+					</h:panelGroup>
+				</f:facet>
+				<h:outputText value="#{inventory.division.name}" />
+			</rich:column>
+			<rich:column width="100px"
+				filterValue="#{specFindFilteringBean.inventoryPersonFilter}"
+				filterExpression="#{fn:containsIgnoreCase(inventory.person.name, specFindFilteringBean.inventoryPersonFilter)}"
+				filterType="custom">
+				<f:facet name="header">
+					<h:panelGroup>
+						<h:outputText value="МОЛ" />
+						<h:selectOneMenu
+							value="#{specFindFilteringBean.inventoryPersonFilter}">
+							<f:selectItems value="#{specFind.allPersonList}" />
+							<a4j:ajax render="tableInventories" execute="@this"
+								event="change" status="ajaxStatus" />
+						</h:selectOneMenu>
+					</h:panelGroup>
+				</f:facet>
+				<h:outputText value="#{inventory.person.name}" />
+			</rich:column>
+		</rich:extendedDataTable>
+
+	</ui:composition>
+
+</body>
+</html>

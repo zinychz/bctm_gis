@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Insert title here</title>
+</head>
+<body>
+
+	<ui:composition>
+
+		<h:inputHidden id="currentX" value="#{mapFind.currentPoint.x}" />
+		<h:inputHidden id="currentY" value="#{mapFind.currentPoint.y}" />
+		<h:inputHidden id="currentType" value="#{mapFind.currentType}" />
+		<h:inputHidden id="children" value="#{mapFind.children}" />
+
+		<h:form prependId="false" id="outerLinksForm">
+
+			<h:inputHidden id="outerLinks" value="#{actions.renderOuter}" />
+
+			<h:commandButton style="display:none;" id="outerLinksButton"
+				value="outerLinksButton">
+				<a4j:ajax status="ajaxStatus" execute="outerLinks"
+					render="userActionForm" />
+			</h:commandButton>
+
+		</h:form>
+
+		<h:form prependId="false" id="userActionForm" style="height: 100%;">
+
+			<h:outputLink value="#" tabindex="1" title="Поиск и группы на карте"
+				styleClass="#{actions.styleOuter(0)}"
+				onclick="document.getElementById('outerLinks').value = 0; document.getElementById('outerLinksButton').click(); return false;">
+						Карта
+					</h:outputLink>
+
+			<h:outputLink value="#" tabindex="4"
+				title="Товарно-материальные ценности, связь с картой"
+				styleClass="#{actions.styleOuter(1)}"
+				onclick="document.getElementById('outerLinks').value = 1; document.getElementById('outerLinksButton').click(); return false;">
+						ТМЦ
+					</h:outputLink>
+
+			<h:outputLink value="#" tabindex="4"
+				title="Ремонты, состав ремонтов, затраты"
+				styleClass="#{actions.styleOuter(2)}" onclick="return false;"
+				disabled="true">
+						Ремонты
+					</h:outputLink>
+
+			<h:outputLink value="#" tabindex="4" title="Страхование, договора"
+				styleClass="#{actions.styleOuter(3)}" onclick="return false;"
+				disabled="true">
+						Страхование
+					</h:outputLink>
+
+			<h:panelGroup id="mapGroup" styleClass="tabbOuterContent"
+				rendered="#{actions.isOuterCurrent(0)}" layout="block">
+
+				<ui:include src="sections/actions/currentMap.xhtml" />
+
+				<h:panelGroup styleClass="tabbContent"
+					rendered="#{actions.isMapCurrent(0)}" layout="block">
+
+					<ui:include src="sections/actions/mapActions.xhtml" />
+
+				</h:panelGroup>
+
+				<h:panelGroup styleClass="tabbContent"
+					rendered="#{actions.isMapCurrent(1)}" layout="block">
+				</h:panelGroup>
+
+				<h:commandLink tabindex="2" title="Поиск объектов на карте"
+					styleClass="#{actions.styleMap(0)}"
+					action="#{actions.renderMap(0)}" value="Поиск на карте">
+
+					<a4j:ajax status="ajaxStatus" render="@form" />
+
+				</h:commandLink>
+
+				<h:commandLink disabled="true" tabindex="2"
+					title="Редактирование карты" styleClass="#{actions.styleMap(1)}"
+					action="#{actions.renderMap(1)}" value="Редактор">
+
+					<a4j:ajax status="ajaxStatus" render="@form" />
+
+				</h:commandLink>
+
+			</h:panelGroup>
+
+			<h:panelGroup id="specGrop" styleClass="tabbOuterContent"
+				rendered="#{actions.isOuterCurrent(1)}" layout="block">
+
+				<ui:include src="sections/actions/currentSpecial.xhtml" />
+
+				<h:panelGroup styleClass="tabbContent"
+					rendered="#{actions.isSpecCurrent(0)}" layout="block">
+
+					<ui:include src="sections/actions/specFindActions.xhtml" />
+
+				</h:panelGroup>
+
+				<h:panelGroup id="propertySpecialGroup" styleClass="tabbContent"
+					rendered="#{actions.isSpecCurrent(1)}" layout="block">
+
+					<ui:include src="sections/actions/propertyRoute.xhtml" />
+					<ui:include src="sections/actions/propertyBoiler.xhtml" />
+
+				</h:panelGroup>
+
+				<h:commandLink tabindex="2"
+					title="Поиск товарно-материальных ценностей"
+					styleClass="#{actions.styleSpec(0)}"
+					action="#{actions.renderSpec(0)}" value="Поиск ТМЦ">
+
+					<a4j:ajax status="ajaxStatus" render="@form" />
+
+				</h:commandLink>
+
+				<h:commandLink tabindex="2" title="Характеристики трассы/котельной"
+					styleClass="#{actions.styleSpec(1)}"
+					action="#{actions.renderSpec(1)}" value="Характеристики">
+
+					<a4j:ajax status="ajaxStatus" render="@form" />
+
+				</h:commandLink>
+
+			</h:panelGroup>
+
+		</h:form>
+
+	</ui:composition>
+
+</body>
+</html>

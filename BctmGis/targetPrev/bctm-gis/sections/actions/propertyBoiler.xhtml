@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Insert title here</title>
+</head>
+<body>
+
+	<ui:composition>
+
+		<h:panelGroup layout="block"
+			rendered="#{not empty specFind.currentInventory and specFind.currentInventory.boiler eq 1}">
+			<div>
+				<fieldset
+					style="margin: 3px; padding-top: 0; border: 1px solid #ddd;">
+					<legend>Технич. хар-ки</legend>
+					<table style="width: 100%;">
+						<tr>
+
+							<td class="labelGrid">Тип котельной:</td>
+							<td class="valueGrid" colspan="3"><h:selectOneMenu
+									value="#{boilerProperty.currentBoilerProperty.boilerType.name}"
+									style="width:100%;">
+									<f:selectItems value="#{boilerProperty.allBoilerTypeList}" />
+								</h:selectOneMenu></td>
+						</tr>
+						<tr>
+
+							<td class="labelGrid">Нагрузка ГВС:</td>
+							<td class="valueGrid">#{boilerProperty.currentBoilerProperty.capacity}</td>
+
+							<td class="labelGrid">Отопление:</td>
+							<td class="valueGrid">#{boilerProperty.currentBoilerProperty.heating}</td>
+
+						</tr>
+						<tr>
+
+							<td class="labelGrid">Сум.присоед.мощ.:</td>
+							<td class="valueGrid">#{boilerProperty.currentBoilerProperty.capacity
+								+ boilerProperty.currentBoilerProperty.heating}</td>
+
+							<td class="labelGrid">Сум.устан.мощ.:</td>
+							<td class="valueGrid">упс...</td>
+
+						</tr>
+					</table>
+				</fieldset>
+				<fieldset
+					style="margin: 3px; padding-top: 0; border: 1px solid #ddd;">
+					<legend>Примечания</legend>
+					<div style="overflow: auto;">
+						<h:inputTextarea
+							value="#{boilerProperty.currentBoilerProperty.remark}" rows="3"
+							style="width:98%;" />
+					</div>
+				</fieldset>
+
+
+				<fieldset
+					style="margin: 3px; padding-top: 0; border: 1px solid #ddd;">
+					<legend>Составляющие</legend>
+					<div style="width:98%;">
+						<rich:extendedDataTable style="margin: 1px;"
+							value="#{boilerProperty.boilerItems}" var="boilerItem"
+							id="tableBoilerItems" frozenColumns="1" selectionMode="single">
+							<f:facet name="noData">
+                		Нет данных
+            		</f:facet>
+							<rich:column width="90px">
+								<f:facet name="header">
+									<h:outputText value="Наименование" />
+								</f:facet>
+								<h:outputText value="#{boilerItem.material.name}" />
+							</rich:column>
+							<rich:column width="30px" styleClass="rightAlign">
+								<f:facet name="header">
+									<h:outputText value="Количество" />
+								</f:facet>
+								<h:outputText value="#{boilerItem.quantity}" />
+							</rich:column>
+							<rich:column width="30px">
+								<f:facet name="header">
+									<h:outputText value="Единицы" />
+								</f:facet>
+								<h:outputText value="#{boilerItem.material.measure.name}" />
+							</rich:column>
+							<rich:column width="30px" styleClass="rightAlign">
+								<f:facet name="header">
+									<h:outputText value="Уст.мощ." />
+								</f:facet>
+								<h:outputText value="#{boilerItem.installPower}" />
+							</rich:column>
+							<rich:column width="30px">
+								<f:facet name="header">
+									<h:outputText value="Регистр.№" />
+								</f:facet>
+								<h:outputText value="#{boilerItem.registrationNumber}" />
+							</rich:column>
+							<rich:column width="30px" styleClass="rightAlign">
+								<f:facet name="header">
+									<h:outputText value="Период.пров." />
+								</f:facet>
+								<h:outputText value="#{boilerItem.checkPeriod.period}" />
+							</rich:column>
+							<rich:column width="40px">
+								<f:facet name="header">
+									<h:outputText value="Посл.пров." />
+								</f:facet>
+								<h:outputText value="#{boilerItem.lastCheckDate}">
+									<f:convertDateTime pattern="dd.MM.yy" />
+								</h:outputText>
+							</rich:column>
+						</rich:extendedDataTable>
+					</div>
+				</fieldset>
+			</div>
+		</h:panelGroup>
+	</ui:composition>
+
+</body>
+</html>
