@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Insert title here</title>
+</head>
+<body>
+
+	<ui:composition>
+
+		<fieldset style="margin: 3px; padding-top: 0; border: 1px solid #ddd;">
+			<legend>Режим карты, тип объекта</legend>
+
+			<h:panelGrid columns="2" style="width: 100%;">
+
+				<h:outputText value="Режим карты:" />
+
+				<h:selectOneMenu id="selectMode" value="#{editor.currentMode}">
+					<f:selectItems value="#{editor.modes}" var="mode" />
+					<f:ajax execute="@this"
+						render="@this selectTypeShape getShapeInfo nameInput" />
+				</h:selectOneMenu>
+
+				<h:outputText value="Тип объекта:" />
+
+				<h:selectOneMenu id="selectTypeShape"
+					value="#{editor.createEditShapeType}">
+					<f:selectItems itemValue="#{entry.key}"
+						value="#{editor.mappingTypes.entrySet()}"
+						itemLabel="#{entry.value}" var="entry" />
+
+					<f:ajax execute="@this" render="@this" />
+				</h:selectOneMenu>
+				<span />
+				<h:commandButton id="setModeButton" value="Применить">
+					<a4j:ajax status="ajaxStatus" execute="@this"
+						render="userGisWindow mapMode createEditShapeInfo selectTypeShape getShapeInfo saveButton"
+						onerror="alert('Ой!');"
+						oncomplete="restoreAfterRefreshAjaxGis({status:'success'})" />
+				</h:commandButton>
+
+			</h:panelGrid>
+		</fieldset>
+
+		<fieldset style="margin: 3px; padding-top: 0; border: 1px solid #ddd;">
+			<legend>Действия, данные</legend>
+
+			<h:panelGrid columns="2" style="width: 100%;">
+
+				<h:outputText value="Название объекта:" />
+
+				<h:inputText id="nameInput" value="#{editor.createEditShapeName}" />
+				<span />
+				<h:commandButton id="saveButton" value="Сохранить"
+					disabled="#{editor.saveButtonDisabled}">
+					<a4j:ajax status="ajaxStatus" execute="nameInput"
+						onerror="alert('Ой, не сохранился!');"
+						oncomplete="saveCreateEditShape()" />
+
+				</h:commandButton>
+
+			</h:panelGrid>
+		</fieldset>
+
+	</ui:composition>
+
+</body>
+</html>

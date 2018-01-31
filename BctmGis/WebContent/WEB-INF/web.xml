@@ -1,0 +1,62 @@
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	      http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+
+	<display-name>Bctm Gis</display-name>
+
+	<welcome-file-list>
+		<welcome-file>gis.xhtml</welcome-file>
+	</welcome-file-list>
+
+	<!-- For use JSF -->
+	<servlet>
+		<servlet-name>Faces Servlet</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>/faces/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.jsf</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.faces</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.xhtml</url-pattern>
+	</servlet-mapping>
+
+	<!--This name is default for Spring context: /WEB-INF/thisName-servlet.xml -->
+	<!-- <servlet> <servlet-name>gis-dispatcher</servlet-name> <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class> 
+		<load-on-startup>1</load-on-startup> </servlet> -->
+
+	<!-- This is a default servlet for all requests -->
+	<!-- <servlet-mapping> <servlet-name>gis-dispatcher</servlet-name> <url-pattern>/</url-pattern> 
+		</servlet-mapping> -->
+
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/gis-dispatcher-servlet.xml
+			classpath:ormContext.xml
+		</param-value>
+	</context-param>
+
+	<!-- <context-param> <param-name>javax.faces.PROJECT_STAGE</param-name> 
+		<param-value>Production</param-value> </context-param> -->
+
+	<!-- <filter> <description> </description> <display-name>FilterUTF8CharacterEncoding</display-name> 
+		<filter-name>FilterUTF8CharacterEncoding</filter-name> <filter-class>bctm.FilterUTF8CharacterEncoding</filter-class> 
+		</filter> <filter-mapping> <filter-name>FilterUTF8CharacterEncoding</filter-name> 
+		<url-pattern>/*</url-pattern> </filter-mapping> -->
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+</web-app>

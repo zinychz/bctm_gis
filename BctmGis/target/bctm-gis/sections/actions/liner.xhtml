@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Insert title here</title>
+</head>
+<body>
+
+	<ui:composition>
+
+		<fieldset style="margin: 3px; padding-top: 0; border: 1px solid #ddd;">
+			<legend>Прозрачность</legend>
+			<rich:inputNumberSlider id="opacitySlider"
+				value="#{liner.opacitySliderValue}" showInput="true"
+				enableManualInput="true" showBoundaryValues="true"
+				showTooltip="true" maxValue="100" minValue="0" inputPosition="right">
+
+				<a4j:ajax event="change" execute="@this" onerror="alert('Ой!');"
+					oncomplete="setOpacity('opacitySlider_input', 'userGisWindow');" />
+
+			</rich:inputNumberSlider>
+		</fieldset>
+
+		<fieldset style="margin: 3px; padding-top: 0; border: 1px solid #ddd;">
+			<legend>Выбор подложки</legend>
+			<h:selectOneRadio id="currentLiner" value="#{liner.currentLiner}"
+				layout="pageDirection">
+				<f:selectItem itemValue="DEFAULT" itemLabel="По умолчанию" />
+				<f:selectItem itemValue="ARCGIS" itemLabel="Карты ArcGis" />
+				<f:selectItem itemValue="GOOGLE" itemLabel="Карты Google" />
+
+				<a4j:ajax execute="@this" render="@this arcGisGoogleMaps"
+					onerror="alert('Ой!');" oncomplete="refreshLiner()" />
+
+			</h:selectOneRadio>
+		</fieldset>
+
+		<h:panelGroup id="arcGisGoogleMaps">
+
+			<h:panelGroup layout="block" id="arcGisMaps"
+				rendered="#{liner.currentLiner eq 'ARCGIS'}">
+				<fieldset
+					style="margin: 3px; padding-top: 0; border: 1px solid #ddd;">
+					<legend>Карты ArcGis</legend>
+
+					<h:selectOneMenu id="currentArcGisMap"
+						value="#{liner.currentArcGisMap}"
+						onchange="changeArcGisMap(this.value)">
+						<f:selectItems itemValue="#{entry.key}"
+							value="#{liner.arcGisMap.entrySet()}" itemLabel="#{entry.value}"
+							var="entry" />
+
+						<a4j:ajax execute="@this" render="@this" onerror="alert('Ой!');" />
+					</h:selectOneMenu>
+				</fieldset>
+			</h:panelGroup>
+
+			<h:panelGroup layout="block" id="googleMaps"
+				rendered="#{liner.currentLiner eq 'GOOGLE'}">
+				<fieldset
+					style="margin: 3px; padding-top: 0; border: 1px solid #ddd;">
+					<legend>Карты Google</legend>
+
+					<h:selectOneMenu id="currentGoogleMap"
+						value="#{liner.currentGoogleMap}"
+						onchange="changeGoogleMap(this.value)">
+						<f:selectItems itemValue="#{entry.key}"
+							value="#{liner.googleMap.entrySet()}" itemLabel="#{entry.value}"
+							var="entry" />
+
+						<a4j:ajax execute="@this" render="@this" onerror="alert('Ой!');" />
+					</h:selectOneMenu>
+				</fieldset>
+			</h:panelGroup>
+
+		</h:panelGroup>
+
+	</ui:composition>
+
+</body>
+</html>
