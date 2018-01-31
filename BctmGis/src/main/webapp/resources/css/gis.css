@@ -1,5 +1,21 @@
 @CHARSET "UTF-8";
 
+/*polygon[id="shp-1"]
+{
+	opacity: 0.5;
+}*/
+
+/*ellipse[id^="php"]:hover
+{
+	fill: yellow;
+	
+}*/
+
+/*text
+{
+    pointer-events: none;
+}*/
+
 .tabContentOut
 {
 	/*border: 1px solid black;*/
@@ -139,12 +155,53 @@
 	/*overflow: hidden;*/
 }
 
+#arcGisMap{
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+#googleMap{
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
 .contentGis {
 	height: 100%;
 	display: block;
 	overflow: hidden;
-	background-color: rgb(245, 225, 192);
+	/*background-color: rgba(245, 225, 192, 1);*/
+	background-color: rgba(243, 206, 151, 1);
 	cursor: move;
+	
+	width: 100%;
+	/*opacity: 1;*/
+	position: absolute;
+	top: 0;
+	left: 0;
+	
+	/*border: 1px solid yellow;*/
+	
+	/*z-index: 4;*/
+}
+
+.contentGisEdit {
+	height: 100%;
+	display: block;
+	overflow: hidden;
+	background-color: rgba(245, 225, 192, 0);
+	/*cursor: move;*/
+	
+	width: 100%;
+	/*opacity: 0.6;*/
+	position: absolute;
+	top: 0;
+	left: 0;
 }
 
 svg g a

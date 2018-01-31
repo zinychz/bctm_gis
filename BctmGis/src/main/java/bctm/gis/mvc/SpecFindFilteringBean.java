@@ -3,10 +3,15 @@ package bctm.gis.mvc;
 import java.io.Serializable;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 
+import org.springframework.context.annotation.Scope;
+
 @ManagedBean
-@ViewScoped
+//@ViewScoped
+//@SessionScoped
+@Scope("session") //need this, JSR-330 in Spring context is singleton by default
 public class SpecFindFilteringBean implements Serializable
 {
 	private String inventoryIdFilter;

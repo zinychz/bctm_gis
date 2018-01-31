@@ -20,9 +20,12 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.springframework.context.annotation.Scope;
+
 @Named("specFind")
 //@SessionScoped
-@ViewScoped
+//@ViewScoped
+@Scope("session") //need this, JSR-330 in Spring context is singleton by default
 public class SpecFindBean implements Serializable
 {
 	@Inject
@@ -37,10 +40,15 @@ public class SpecFindBean implements Serializable
 	@Named("persDao")
 	private PersonDao persDao;
 
-	@Inject
-	@Named("mapFind")
+	//Suppress Circular Dependency
+	//@Inject
+	//@Named("mapFind")
 	private MapFindBean mapFindBean;
 	
+	public void setMapFindBean(MapFindBean mapFindBean) {
+		this.mapFindBean = mapFindBean;
+	}
+
 	@Inject
 	@Named("routeProperty")
 	private RoutePropertyBean routePropertyBean;

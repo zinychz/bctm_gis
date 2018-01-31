@@ -36,25 +36,45 @@
 			<rich:tabPanel style="height: 100%;" switchType="client">
 
 				<rich:tab contentClass="tabContentOut" style="height: 100%;"
-					header="Карта">
-					<ui:include src="sections/actions/currentMap.xhtml" />
-					<ui:include src="sections/actions/mapActions.xhtml" />
+					header="Карта" status="ajaxStatus" switchType="client">
+					
+					<rich:tabPanel style="height: 100%;" switchType="client">
+
+						<ui:include src="sections/actions/currentMap.xhtml" />
+
+						<rich:tab contentClass="tabContentIn" style="height: 100%;" 
+							header="Поиск, группы" status="ajaxStatus" switchType="client" id="findGroupTab" >
+							<ui:include src="sections/actions/mapActions.xhtml" />
+						</rich:tab>
+
+						<rich:tab contentClass="tabContentIn" style="height: 100%;"
+							header="Редактор" status="ajaxStatus" switchType="client">
+							<ui:include src="sections/actions/editor.xhtml" />
+						</rich:tab>
+						
+						<rich:tab contentClass="tabContentIn" style="height: 100%;"
+							header="Подложка" status="ajaxStatus" switchType="client">
+							<ui:include src="sections/actions/liner.xhtml" />
+						</rich:tab>
+
+					</rich:tabPanel>
+										
 				</rich:tab>
 
 				<rich:tab contentClass="tabContentOut" style="height: 100%;"
-					header="ТМЦ">
+					header="ТМЦ" status="ajaxStatus"  switchType="client">
 
 					<rich:tabPanel style="height: 100%;" switchType="client">
 
 						<ui:include src="sections/actions/currentSpecial.xhtml" />
 
 						<rich:tab contentClass="tabContentIn" style="height: 100%;"
-							header="Поиск">
+							header="Поиск" status="ajaxStatus" switchType="client">
 							<ui:include src="sections/actions/specFindActions.xhtml" />
 						</rich:tab>
 
 						<rich:tab contentClass="tabContentIn" style="height: 100%;"
-							header="Характеристики">
+							header="Характеристики" status="ajaxStatus" switchType="client">
 							<h:panelGroup id="propertySpecialGroup" layout="block">
 								<ui:include src="sections/actions/propertyRoute.xhtml" />
 								<ui:include src="sections/actions/propertyBoiler.xhtml" />

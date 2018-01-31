@@ -15,10 +15,12 @@
 
 	<ui:composition>
 
+<!-- <rich:dataScroller fastStep="3" for="tableInventories" /> -->
+
 		<rich:extendedDataTable value="#{specFind.inventories}"
 			var="inventory" id="tableInventories" frozenColumns="2"
-			selectionMode="single" clientRows="0"
-			onrowclick="setCurrentInventoryId('sf#{inventory.id}');">
+			selectionMode="single"  clientRows="150" 
+			onrowclick="setCurrentInventoryId('sf#{inventory.id}');"  >
 			<f:facet name="noData">
                 Не найдено
             </f:facet>

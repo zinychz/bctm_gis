@@ -19,6 +19,31 @@
 		<h:outputStylesheet library="css" name="gis.css" />
 		<h:outputStylesheet library="css" name="jquery.splitter.css" />
 
+		<h:outputStylesheet>
+ 
+	        .rf-ind{
+				height:15px;
+        	    padding:1px;
+            	font-size:11px;
+	            font-family: Arial, Verdana, sans-serif;
+    	    }
+        
+        	.rf-ind-drag.default {
+            	cursor:grabbing;
+	        }
+ 
+    	    .rf-ind-drag.accept {
+        	    cursor:copy;
+            	border:1px solid green;
+	        }
+ 
+    	    .rf-ind-drag.reject {
+        	    cursor:no-drop;
+            	border:1px solid red;
+	        }
+	        
+    	</h:outputStylesheet>
+
 		<a4j:status name="ajaxStatus">
 			<f:facet name="start">
 				<h:panelGroup layout="block"
@@ -33,27 +58,71 @@
 		<div class="mainContainer">
 
 			<h:form prependId="false" id="currentIdForm">
+			
+				<h:inputHidden id="documentSizeInfo" value="#{mapFind.documentSizeInfo}" />
+				<h:commandButton style="display:none;" id="documentSizeButton"
+					value="documentSizeButton">
+					<a4j:ajax execute="documentSizeInfo"
+						onerror="alert('Ой, documentSizeInfo error!');"
+						render="dataGridFoundTree" />
+				</h:commandButton>
+
+				<rich:dragIndicator id="indicatorDnD" acceptClass="accept"
+					rejectClass="reject" draggingClass="default">Группировать с...</rich:dragIndicator>
+
+				<h:inputHidden id="ungroupInfo" value="#{mapFind.ungroupInfo}" />
+				<h:commandButton style="display:none;" id="ungroupButton"
+					value="ungroupButton">
+					<a4j:ajax status="ajaxStatus" execute="ungroupInfo"
+						onerror="alert('Ой, не разгруппировалось!');"
+						render="currentSelection dataGridFoundTree ungroupInfo" />
+				</h:commandButton>
+
+				<h:inputHidden id="mapMode" value="#{editor.currentModeCode}" />
+				<h:inputHidden id="createEditShapeInfo"
+					value="#{editor.createEditShapeInfo}" />
+
+				<h:inputHidden id="windowInfo" value="#{gis.windowInfo}" />
 
 				<h:inputHidden id="currentId" value="#{mapFind.currentId}" />
 				<h:inputHidden id="currentInventoryId"
 					value="#{specFind.currentInventoryId}" />
 
+				<h:commandButton style="display:none;" id="renderShapes"
+					value="renderShapes">
+					<f:ajax execute="windowInfo createEditShapeInfo"
+						render="userGisWindow createEditShapeInfo selectMode mapMode selectTypeShape saveButton nameInput opacitySlider currentLiner arcGisGoogleMaps"
+						onerror="errMessage" onevent="restoreAfterRefreshAjaxGis" />
+				</h:commandButton>
+
+				<h:commandButton style="display:none;" id="saveCreateEditShape"
+					value="saveCreateEditShape">
+					<a4j:ajax status="ajaxStatus"
+						execute="windowInfo createEditShapeInfo"
+						onerror="alert('Ой, не сохранился совсем!');"
+						oncomplete="restoreAfterRefreshAjaxGis({status:'success'})"
+						render="createEditShapeInfo currentId currentSelection currentInventoryPanelGroup propertySpecialGroup currentType currentX currentY children userGisWindow"
+						listener="#{editor.save}" />
+				</h:commandButton>
+
 				<h:commandButton style="display:none;" id="getShapeInfo"
 					value="getShapeInfo">
 					<f:ajax execute="currentId"
-						render="currentId currentX currentY currentType children currentSelection currentInventoryPanelGroup propertySpecialGroup"
-						onevent="setAnimate" />
+						render="currentId currentX currentY currentType children currentSelection currentInventoryPanelGroup propertySpecialGroup selectTypeShape saveButton nameInput"
+						onevent="#{editor.currentModeCode == 'EDIT'? 'focusOnShape' : editor.currentModeCode == 'DELETE'? 'focusOnShape' : editor.currentModeCode == 'COPY'? 'focusOnShape' : 'setAnimate'}" />
 				</h:commandButton>
+
 				<h:commandButton style="display:none;" id="getShapeInfoAndFocus"
 					value="getShapeInfoAndFocus">
 					<f:ajax execute="currentId"
-						render="currentId currentX currentY currentType children currentSelection currentInventoryPanelGroup propertySpecialGroup"
+						render="currentId currentX currentY currentType children currentSelection currentInventoryPanelGroup propertySpecialGroup selectTypeShape saveButton nameInput"
 						onevent="focusOnShape" />
 				</h:commandButton>
+
 				<h:commandButton style="display:none;" id="getInventoryInfo"
 					value="getInventoryInfo">
 					<f:ajax execute="currentInventoryId"
-						render="currentInventoryPanelGroup currentId currentX currentY currentType children currentSelection currentInventoryPanelGroup propertySpecialGroup"
+						render="currentId currentX currentY currentType children currentSelection currentInventoryPanelGroup propertySpecialGroup selectTypeShape saveButton nameInput"
 						onevent="#{specFind.synchronizedMap ? 'focusOnShape' : 'progressCursorAjax'}" />
 				</h:commandButton>
 

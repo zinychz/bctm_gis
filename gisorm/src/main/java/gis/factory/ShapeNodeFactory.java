@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.swing.event.EventListenerList;
@@ -22,23 +23,25 @@ import gis.orm.GisgraphsDao;
 import gis.tree.AbstractGroupNode;
 import gis.tree.GisgraphsNode;
 
-public class ShapeNodeFactory
-{
+public class ShapeNodeFactory {
 	private GisgraphsDao gisDao;
 
-	private HashMap<Long, List<Gisgraphs>> objectsInGroupCache = new HashMap<Long, List<Gisgraphs>>();
-	private HashMap<Long, List<Gisgraphs>> groupsCache = new HashMap<Long, List<Gisgraphs>>();
-	private HashMap<Long, GisgraphsNode> nodesCache = new HashMap<Long, GisgraphsNode>();
+	private Map<Long, List<Gisgraphs>> objectsInGroupCache = new HashMap<Long, List<Gisgraphs>>();
+	private Map<Long, List<Gisgraphs>> groupsCache = new HashMap<Long, List<Gisgraphs>>();
+	private Map<Long, GisgraphsNode> nodesCache = new HashMap<Long, GisgraphsNode>();
 
 	// ----------------------------------------MainMethods----------------------------------------
 
-	public GisgraphsNode getGisgraphsNode(String name, long gisgraphId, ShapeNodeFactory factory,
-			TreeNode parent)
-	{
+	public void removeFromCache(long id) {
+		nodesCache.remove(id);
+		objectsInGroupCache.remove(id);
+		groupsCache.remove(id);
+	}
+
+	public GisgraphsNode getGisgraphsNode(String name, long gisgraphId, ShapeNodeFactory factory, TreeNode parent) {
 		GisgraphsNode node = nodesCache.get(gisgraphId);
 
-		if (node == null)
-		{
+		if (node == null) {
 			node = new GisgraphsNode(name, gisgraphId, factory, parent);
 			nodesCache.put(gisgraphId, node);
 		}
@@ -46,19 +49,15 @@ public class ShapeNodeFactory
 		return node;
 	}
 
-	public List<Gisgraphs> getObjectsInGroup(long id)
-	{
+	public List<Gisgraphs> getObjectsInGroup(long id) {
 		List<Gisgraphs> list = objectsInGroupCache.get(id);
 
-		if (list == null)
-		{
+		if (list == null) {
 			Set<Gisgraphs> gisgraphs = gisDao.getChildren(id);
 			list = Arrays.asList(gisgraphs.toArray(new Gisgraphs[0]));
 
-			Collections.sort(list, new Comparator<Gisgraphs>()
-			{
-				public int compare(Gisgraphs o1, Gisgraphs o2)
-				{
+			Collections.sort(list, new Comparator<Gisgraphs>() {
+				public int compare(Gisgraphs o1, Gisgraphs o2) {
 					return o1.getName().compareToIgnoreCase(o2.getName());
 				}
 			});
@@ -69,19 +68,15 @@ public class ShapeNodeFactory
 		return list;
 	}
 
-	public List<Gisgraphs> getGroups(long id)
-	{
+	public List<Gisgraphs> getGroups(long id) {
 		List<Gisgraphs> list = groupsCache.get(id);
 
-		if (list == null)
-		{
+		if (list == null) {
 			Set<Gisgraphs> gisgraphs = gisDao.getGroups(id);
 			list = Arrays.asList(gisgraphs.toArray(new Gisgraphs[0]));
 
-			Collections.sort(list, new Comparator<Gisgraphs>()
-			{
-				public int compare(Gisgraphs o1, Gisgraphs o2)
-				{
+			Collections.sort(list, new Comparator<Gisgraphs>() {
+				public int compare(Gisgraphs o1, Gisgraphs o2) {
 					return o1.getName().compareToIgnoreCase(o2.getName());
 				}
 			});
@@ -94,12 +89,10 @@ public class ShapeNodeFactory
 
 	// ----------------------------------------TreeModel----------------------------------------
 
-	public TreeModel getTreeModel(List<Gisgraphs> list)
-	{
+	public TreeModel getTreeModel(List<Gisgraphs> list) {
 		List<TreeNode> nodesList = new ArrayList<TreeNode>();
 
-		for (Gisgraphs g : list)
-		{
+		for (Gisgraphs g : list) {
 			nodesList.add(getGisgraphsNode(g.getName(), g.getId(), this, null));
 		}
 
@@ -108,126 +101,101 @@ public class ShapeNodeFactory
 		return new ShapeTreeModel(root);
 	}
 
-	private class ShapeTreeModel implements TreeModel
-	{
+	private class ShapeTreeModel implements TreeModel {
 		private EventListenerList listenerList = new EventListenerList();
 		private Object root;
 
-		public ShapeTreeModel()
-		{
+		public ShapeTreeModel() {
 		}
 
-		public ShapeTreeModel(Object root)
-		{
+		public ShapeTreeModel(Object root) {
 			this.root = root;
 		}
 
-		public void addTreeModelListener(TreeModelListener l)
-		{
+		public void addTreeModelListener(TreeModelListener l) {
 			listenerList.add(TreeModelListener.class, l);
 		}
 
-		public void removeTreeModelListener(TreeModelListener l)
-		{
+		public void removeTreeModelListener(TreeModelListener l) {
 			listenerList.remove(TreeModelListener.class, l);
 		}
 
-		public Object getChild(Object parent, int index)
-		{
-			if (parent instanceof TreeNode)
-			{
+		public Object getChild(Object parent, int index) {
+			if (parent instanceof TreeNode) {
 				return ((TreeNode) parent).getChildAt(index);
 			}
 
 			return null;
 		}
 
-		public int getChildCount(Object parent)
-		{
-			if (parent instanceof TreeNode)
-			{
+		public int getChildCount(Object parent) {
+			if (parent instanceof TreeNode) {
 				return ((TreeNode) parent).getChildCount();
 			}
 
 			return 0;
 		}
 
-		public int getIndexOfChild(Object parent, Object child)
-		{
-			if (parent instanceof TreeNode && child instanceof TreeNode)
-			{
+		public int getIndexOfChild(Object parent, Object child) {
+			if (parent instanceof TreeNode && child instanceof TreeNode) {
 				return ((TreeNode) parent).getIndex((TreeNode) child);
 			}
 
 			return -1;
 		}
 
-		public Object getRoot()
-		{
+		public Object getRoot() {
 			return root;
 		}
 
-		public void setRoot(Object root)
-		{
+		public void setRoot(Object root) {
 			this.root = root;
 		}
 
-		public boolean isLeaf(Object node)
-		{
-			if (node instanceof TreeNode)
-			{
+		public boolean isLeaf(Object node) {
+			if (node instanceof TreeNode) {
 				return ((TreeNode) node).isLeaf();
 			}
 
 			return true;
 		}
 
-		public void valueForPathChanged(TreePath path, Object newValue)
-		{
+		public void valueForPathChanged(TreePath path, Object newValue) {
 		}
 	}
 
-	private class RootNode implements TreeNode
-	{
+	private class RootNode implements TreeNode {
 		private List<TreeNode> children;
 
-		public RootNode(List<TreeNode> children)
-		{
+		public RootNode(List<TreeNode> children) {
 			this.children = children;
 		}
 
-		public Enumeration children()
-		{
+		public Enumeration children() {
 			return Iterators.asEnumeration(children.iterator());
 		}
 
-		public boolean getAllowsChildren()
-		{
+		public boolean getAllowsChildren() {
 			return true;
 		}
 
-		public TreeNode getChildAt(int childIndex)
-		{
+		public TreeNode getChildAt(int childIndex) {
 			return children.get(childIndex);
 		}
 
-		public int getChildCount()
-		{
+		public int getChildCount() {
 			return children.size();
 		}
 
-		public int getIndex(TreeNode node)
-		{
+		public int getIndex(TreeNode node) {
 			return children.indexOf(node);
 		}
 
-		public TreeNode getParent()
-		{
+		public TreeNode getParent() {
 			return null;
 		}
 
-		public boolean isLeaf()
-		{
+		public boolean isLeaf() {
 			return children.size() <= 0;
 		}
 
@@ -235,23 +203,19 @@ public class ShapeNodeFactory
 
 	// ----------------------------------------Constructors----------------------------------------
 
-	public ShapeNodeFactory(GisgraphsDao gisDao)
-	{
+	public ShapeNodeFactory(GisgraphsDao gisDao) {
 		this.gisDao = gisDao;
 	}
 
-	public ShapeNodeFactory()
-	{
+	public ShapeNodeFactory() {
 	}
 
 	// ----------------------------------------Getters&Setters----------------------------------------
-	public GisgraphsDao getGisDao()
-	{
+	public GisgraphsDao getGisDao() {
 		return gisDao;
 	}
 
-	public void setGisDao(GisgraphsDao gisDao)
-	{
+	public void setGisDao(GisgraphsDao gisDao) {
 		this.gisDao = gisDao;
 	}
 }

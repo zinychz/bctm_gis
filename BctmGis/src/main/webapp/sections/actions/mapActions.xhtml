@@ -14,19 +14,106 @@
 
 	<ui:composition>
 
+		<h:outputStylesheet>
+	        
+	        .rf-dg .rf-dg-c{
+		        border-left: none;
+		        border-top: none;
+		        border-bottom: none;
+		        margin: 0;
+		        padding: 0;
+	        }
+	        .rf-dg{
+	        	margin: 2px;
+	        	border-bottom: 1px solid #ddd;
+	        }
+	                
+	        #matchesName .rf-au-fld-btn{
+	        	vertical-align: bottom !important;
+	        }
+	        
+    	</h:outputStylesheet>
+
+		<!-- <h:inputText value="#{mapFind.matchesName}" id="matchesName" /> -->
 		<h:panelGrid columns="2">
-			<h:inputText value="#{mapFind.matchesName}" id="matchesName" />
+
+			<rich:autocomplete mode="cachedAjax" minChars="3" autofill="false"
+				selectFirst="false" autocompleteMethod="#{mapFind.getFoundNames}"
+				id="matchesName" value="#{mapFind.matchesName}" showButton="true" />
+
 			<h:commandButton id="findButton" value="Найти">
-				<a4j:ajax status="ajaxStatus" execute="caseSensitive matchesName"
-					render="foundTree" />
+				<a4j:ajax status="ajaxStatus" execute="matchesName"
+					render="dataGridFoundTree" />
 			</h:commandButton>
 
 			<h:outputText value="Учитывать регистр" />
 			<h:selectBooleanCheckbox id="caseSensitive"
-				value="#{mapFind.caseSensitive}" />
+				value="#{mapFind.caseSensitive}">
+				<a4j:ajax execute="@this" render="@none" />
+			</h:selectBooleanCheckbox>
+
 		</h:panelGrid>
 
-		<div style="height: 66%; overflow: auto;" id="divFindTree">
+		<!-- <rich:dataScroller maxPages="7" fastControls="hide" for="dataGridFoundTree" render="dataGridFoundTree" /> -->
+
+		<div style="width: 100%; height: 95%; overflow: auto;" id="divFindTree">
+			<rich:dataGrid value="#{mapFind.rootNodes}" var="nodeRow" columns="1" style="width: 100%;"
+				elements="#{mapFind.elementsDataGridFoundTree}" border="0" id="dataGridFoundTree" >
+
+				<f:facet name="header">
+					<rich:dataScroller maxPages="6" fastControls="hide" />
+				</f:facet>
+
+				<rich:tree id="foundTree" nodeType="#{node.type}" var="node"
+					status="ajaxStatus" value="#{nodeRow}" toggleType="ajax"
+					selectionType="client" rowKeyVar="rowKey"
+					rowKeyConverter="#{integerSequenceRowKeyConverter}">
+
+					<rich:treeNode iconClass="displayNone" type="gisgraph">
+						<a4j:outputPanel>
+
+							<h:outputLink value="#"
+								onclick="getShapeFromLinkAndFocus('mf#{node.gisgraphId}'); return false;">#{node.name}</h:outputLink>
+
+							<rich:dragSource type="#{node.type}" dragValue="#{node}"
+								dragIndicator="indicatorDnD" />
+							<rich:dropTarget acceptedTypes="group objectInGroup"
+								dropListener="#{dndeventtree.processDrop}" dropValue="#{node}"
+								render="currentSelection dataGridFoundTree" />
+
+						</a4j:outputPanel>
+					</rich:treeNode>
+					<rich:treeNode iconLeaf="org.richfaces/node_icon.gif"
+						iconClass="rf-trn-ico" type="objectInGroup">
+						<a4j:outputPanel>
+                    		#{node.name}
+                    		
+                    		<rich:dragSource type="#{node.type}"
+								dragValue="#{node}" dragIndicator="indicatorDnD" />
+							<rich:dropTarget acceptedTypes="gisgraph"
+								dropListener="#{dndeventtree.processDrop}" dropValue="#{node}"
+								render="currentSelection dataGridFoundTree" />
+
+						</a4j:outputPanel>
+					</rich:treeNode>
+					<rich:treeNode iconLeaf="org.richfaces/node_icon.gif"
+						iconClass="rf-trn-ico" type="group">
+						<a4j:outputPanel>
+							#{node.name}
+							
+							<rich:dragSource type="#{node.type}" dragValue="#{node}"
+								dragIndicator="indicatorDnD" />
+							<rich:dropTarget acceptedTypes="gisgraph"
+								dropListener="#{dndeventtree.processDrop}" dropValue="#{node}"
+								render="currentSelection dataGridFoundTree" />
+
+						</a4j:outputPanel>
+					</rich:treeNode>
+				</rich:tree>
+			</rich:dataGrid>
+		</div>
+		<!-- 		<div style="height: 66%; overflow: auto;" id="divFindTree">
+
 			<rich:tree id="foundTree" nodeType="#{node.type}" var="node"
 				status="ajaxStatus" value="#{mapFind.rootNodes}" toggleType="ajax"
 				selectionType="client">
@@ -45,7 +132,9 @@
 					#{node.name}
                 </rich:treeNode>
 			</rich:tree>
+
 		</div>
+ -->
 
 	</ui:composition>
 

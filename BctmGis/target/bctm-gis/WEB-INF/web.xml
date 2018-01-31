@@ -5,8 +5,13 @@
 
 	<display-name>Bctm Gis</display-name>
 
+	<session-config>
+		<session-timeout>20</session-timeout>
+	</session-config>
+
 	<welcome-file-list>
 		<welcome-file>gis.xhtml</welcome-file>
+		<!--<welcome-file>tree.xhtml</welcome-file> -->
 	</welcome-file-list>
 
 	<!-- For use JSF -->
@@ -50,7 +55,7 @@
 
 	<!-- <context-param> <param-name>javax.faces.PROJECT_STAGE</param-name> 
 		<param-value>Production</param-value> </context-param> -->
-		
+
 	<!-- <filter> <description> </description> <display-name>FilterUTF8CharacterEncoding</display-name> 
 		<filter-name>FilterUTF8CharacterEncoding</filter-name> <filter-class>bctm.FilterUTF8CharacterEncoding</filter-class> 
 		</filter> <filter-mapping> <filter-name>FilterUTF8CharacterEncoding</filter-name> 

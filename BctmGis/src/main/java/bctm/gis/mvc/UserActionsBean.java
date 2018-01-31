@@ -6,9 +6,12 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Named;
 
+import org.springframework.context.annotation.Scope;
+
 @Named("actions")
 //@SessionScoped
-@ViewScoped
+//@ViewScoped
+@Scope("session") //need this, JSR-330 in Spring context is singleton by default
 public class UserActionsBean implements Serializable
 {
 	private int outerPageIndex = 0;

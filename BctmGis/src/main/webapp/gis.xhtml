@@ -7,38 +7,52 @@
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Схема теплосетей</title>
+	<meta name="viewport"
+		content="initial-scale=1, maximum-scale=1,user-scalable=no" />
+	<link rel="stylesheet"
+		href="http://js.arcgis.com/3.13/dijit/themes/claro/claro.css" />
+	<link rel="stylesheet"
+		href="http://js.arcgis.com/3.13/esri/css/esri.css" />
 </h:head>
 
-<h:body styleClass="bodyGis">
+<h:body styleClass="bodyGis"
+	onresize="console.log('Detected onresize')">
 
 	<ui:decorate template="/templates/gisDecorator.xhtml">
 
 		<div id="gisSlider" class="gisSlider">
 
-			<div id="userGisWindow" class="contentGis"
-				onmousedown="moveMap(event)" onmousemove="moveMap(event)"
-				onmouseup="moveMap(event)">
+			<div style="height: 100%; display: block; overflow: hidden;">
 
-				<svg width="100%" height="100%"> 
-				
-				<g id="groupScale"
-					transform="translate(-700,-500) scale(1)"> 
+				<div id="arcGisMap"></div>
+				<div id="googleMap"></div>
+
+				<h:panelGroup id="userGisWindow" onmousedown="moveMap(event)"
+					onmousemove="moveMap(event)" onmouseup="moveMap(event)"
+					layout="block" styleClass="#{editor.style}">
+
+					<svg width="100%" height="100%"> 
+						<g id="groupScale"> 
+							<ui:repeat value="#{gis.shapesIntersect}" var="shape">
+								<h:outputText value="#{shape}" escape="false" />
+							</ui:repeat> 
+							<ui:repeat value="#{gis.labelsIntersect}" var="label">
+								<h:outputText value="#{label}" escape="false" />
+							</ui:repeat> 
 					
-				<ui:repeat value="#{gis.shapes}" var="shape">
-					<h:outputText value="#{shape}" escape="false"  /> 
+							<g id="cr_ed_Group"> 
+								<g id="cr_ed_Shape"> 
+									<h:outputText value="#{editor.createEditShapeBody}" escape="false" /> 
+								</g> 
+								<g id="cr_ed_Points"> 
+									<h:outputText value="#{editor.createEditPhantoms}" escape="false" /> 
+								</g> 
+							</g> 
+							<g id="animate" /> 
+						</g> 
+					</svg>
 
-				</ui:repeat>
-				
-				<ui:repeat value="#{gis.labels}" var="label">
-					<h:outputText value="#{label}" escape="false" />
-				</ui:repeat> 
-				
-				<g id="animate" /> 
-				
-				</g> 
-				
-				</svg>
-
+				</h:panelGroup>
 			</div>
 
 			<div class="sideBar">
@@ -55,6 +69,7 @@
 
 	</ui:decorate>
 
+	<script src="http://js.arcgis.com/3.13/"></script>
 	<h:outputScript library="javascript" name="gis.js" />
 
 </h:body>

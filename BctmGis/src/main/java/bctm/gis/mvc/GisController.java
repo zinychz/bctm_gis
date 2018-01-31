@@ -14,33 +14,27 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class GisController
-{
+public class GisController {
 	private GisgraphsDao gisDao;
 	private ShapeFactory shapeFactory;
 
 	@Autowired
-	public GisController(GisgraphsDao gisDao, ShapeFactory shapeFactory)
-	{
+	public GisController(GisgraphsDao gisDao, ShapeFactory shapeFactory) {
 		this.gisDao = gisDao;
 		this.shapeFactory = shapeFactory;
 	}
 
-	@RequestMapping(
-	{ "/" })
-	public String showCityMap(Map<String, Object> model)
-	{
+	@RequestMapping({ "/" })
+	public String showCityMap(Map<String, Object> model) {
 		List<Gisgraphs> listAll = gisDao.getAll();
 		ArrayList<String> shapes = new ArrayList<String>();
 		ArrayList<String> labels = new ArrayList<String>();
 
-		for (Gisgraphs g : listAll)
-		{
-			Graph shape = shapeFactory.createShape(g.getId(), g.getType(), g.getPriority(),
-					g.getName(), g.getCoord());
+		for (Gisgraphs g : listAll) {
+			Graph shape = shapeFactory.createShape(g.getId(), g.getType(), g.getPriority(), g.getName(), g.getCoord(),
+					true);
 
-			if (shape != null)
-			{
+			if (shape != null) {
 				shapes.add(shape.getBody());
 				labels.add(shape.getLabel());
 			}

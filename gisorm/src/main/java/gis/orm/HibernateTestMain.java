@@ -9,6 +9,7 @@ import gis.shapes.Line;
 import gis.shapes.Polygon;
 import gis.tree.GisgraphsNode;
 
+import java.awt.Point;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,17 +27,14 @@ import javax.swing.tree.TreeNode;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class HibernateTestMain extends JFrame
-{
-	public HibernateTestMain(String title)
-	{
+public class HibernateTestMain extends JFrame {
+	public HibernateTestMain(String title) {
 		super(title);
 	}
 
-	public static void main(String[] args) throws SQLException
-	{
-		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[]
-		{ "ormContext.xml" }, true);
+	public static void main(String[] args) throws SQLException {
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[] { "ormContext.xml" },
+				true);
 
 		// BoilerItemDao boilerTypeDao = (BoilerItemDao)
 		// context.getBean("boilerItemDao");
@@ -210,11 +208,100 @@ public class HibernateTestMain extends JFrame
 		// }
 
 		// HibernateTestMain frame = new HibernateTestMain("Test");
-		//
+
 		GisgraphsDao gis = (GisgraphsDao) context.getBean("gisGraphsDao");
-		// List<Gisgraphs> listAll = gis.getAll();
+		 List<Gisgraphs> listAll = gis.getAll();
+
+//		 ShapeNodeFactory nodeFactory = new ShapeNodeFactory(gis);
+
+		Line l = new Line();
+		// l.setShowLabelMode(3);
+		// l.setBeginStrLabel("");
+		// l.setEndStrLabel("");
+		// // l.setIncludeBeginStrLabel(false);
+		l.setFontSize("12");
+		// l.setFill("yellow");
+		l.setStrokeWidth("7");
+		l.setStroke("silver");
+		// l.setRx(3);
+		// l.setRy(3);
 		//
-		// ShapeNodeFactory nodeFactory = new ShapeNodeFactory(gis);
+		l.setFillText("rgb(80,80,80)");
+		// l.setFontWeight("bold");
+		// l.setStrokeText("black");
+		// l.setStrokeWidthText("0.5");
+
+		l.setWidthWord(9);
+		l.setSymbolShift(3);
+
+		Map<String, AbstractShape> mapping = new HashMap<String, AbstractShape>();
+		mapping.put("aalbst:", l);
+		ShapeFactory shapeFactory = new ShapeFactory(mapping);
+//
+//		Graph custom = shapeFactory.createCustomShape(Ellipse.class, new HashMap() {
+//			{
+//				put("fillText", "green");
+//				put("rx", 2);
+//				put("typeId", "some");
+//				put("id", 11);
+//				put("coordinates", new ArrayList() {
+//					{
+//						add(new Point(3, 4));
+//					}
+//				});
+//				put("name", "кот.Some Label");
+//				put("beginStrLabel", "");
+//				put("endStrLabel", "");
+//				put("showLabelMode", 3);
+//			}
+//		});
+//		System.out.println("--------------------------------------------");
+//		System.out.println(((Ellipse) custom).getFillText());
+//		System.out.println(((Ellipse) custom).getRx());
+//		System.out.println(((Ellipse) custom).getBody());
+//		System.out.println(((Ellipse) custom).getLabel());
+//		System.out.println("--------------------------------------------");
+
+		 for (Gisgraphs g : listAll) {
+		 Graph shape = shapeFactory.createShape(g.getId(), g.getType(),
+		 g.getPriority(), g.getName(), g.getCoord(), true);
+		
+		 //System.out.println(shape.getLtPoint());
+		 if(shape != null)
+		 System.out.println(shape.getWrapLinkLabel(0.5d));
+		 }
+
+//		Gisgraphs g = gis.getById(68);
+////		Graph shape = shapeFactory.createShape(g.getId(), g.getType(), g.getPriority(), g.getName(), g.getCoord(),
+////				true);
+////		System.out.println(shape.getBody());
+////		System.out.println(shape.getLabel());
+//		
+//		Gisgraphs gNew = new Gisgraphs();
+//		gNew.setCoord(g.getCoord());
+//		gNew.setName("Zin777");
+//		gNew.setPriority(0l);
+//		gNew.setType(g.getType());
+//		
+//		try {
+//			System.out.println(gis.add(gNew));
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//		Gisgraphs gUpdate = gis.getById(gNew.getId());
+//		gUpdate.setCoord("23,74");
+//		gUpdate.setName("Zin777Update");
+//		gUpdate.setPriority(1l);
+//		gUpdate.setType("abgmdb:");
+//		
+//		gis.update(gUpdate);
+//		System.out.println("---------------------");
+//		System.out.println(gUpdate.getName() + "; " + gUpdate.getCoord());
+//		gUpdate = gis.getById(gNew.getId());
+//		System.out.println(gUpdate.getName() + "; " + gUpdate.getCoord());
+
 		// TreeModel treeModel = nodeFactory.getTreeModel(listAll);
 		//
 		// JTree tree = new JTree(treeModel);
@@ -242,46 +329,48 @@ public class HibernateTestMain extends JFrame
 
 		// System.out.println(gis.getByLikeName(null, false));
 		//
-		List<Gisgraphs> listAll = gis.getAll();
-
-		Map<String, AbstractShape> mapping = new HashMap<String, AbstractShape>();
-
-		Line l = new Line();
-		// l.setShowLabelMode(3);
-		// l.setBeginStrLabel("");
-		// l.setEndStrLabel("");
-		// // l.setIncludeBeginStrLabel(false);
-		// l.setFontSize("3");
-		// l.setFill("yellow");
-		// l.setStrokeWidth("1.5");
-		// l.setStroke("red");
-		// l.setRx(3);
-		// l.setRy(3);
-		
-		l.setFillText("none");
-		l.setFontWeight("bold");
-		l.setStrokeText("black");
-		l.setStrokeWidthText("0.5");
-		mapping.put("aamavn:", l);
+		// List<Gisgraphs> listAll = gis.getAll();
 		//
-		ShapeFactory shapeFactory = new ShapeFactory(mapping);
+		// Map<String, AbstractShape> mapping = new HashMap<String,
+		// AbstractShape>();
 		//
-		// // ShapeFactory shapeFactory = (ShapeFactory)
-		// // context.getBean("shapeFactory");
+		// Line l = new Line();
+		// // l.setShowLabelMode(3);
+		// // l.setBeginStrLabel("");
+		// // l.setEndStrLabel("");
+		// // // l.setIncludeBeginStrLabel(false);
+		// // l.setFontSize("3");
+		// // l.setFill("yellow");
+		// // l.setStrokeWidth("1.5");
+		// // l.setStroke("red");
+		// // l.setRx(3);
+		// // l.setRy(3);
 		//
-		for (Gisgraphs g : listAll)
-		{
-			Graph shape = shapeFactory.createShape(g.getId(), g.getType(), g.getPriority(),
-					g.getName(), g.getCoord());
-
-			if (shape != null && g.getType().equals("aamavn:"))
-			{
-				// System.out.println(shape.getLabel() + " = " +
-				// shape.getBody());
-				System.out.println(shape.getLabel());
-			}
-
-		}
+		// l.setFillText("none");
+		// l.setFontWeight("bold");
+		// l.setStrokeText("black");
+		// l.setStrokeWidthText("0.5");
+		// mapping.put("aamavn:", l);
+		// //
+		// ShapeFactory shapeFactory = new ShapeFactory(mapping);
+		// //
+		// // // ShapeFactory shapeFactory = (ShapeFactory)
+		// // // context.getBean("shapeFactory");
+		// //
+		// for (Gisgraphs g : listAll)
+		// {
+		// Graph shape = shapeFactory.createShape(g.getId(), g.getType(),
+		// g.getPriority(),
+		// g.getName(), g.getCoord());
+		//
+		// if (shape != null && g.getType().equals("aamavn:"))
+		// {
+		// // System.out.println(shape.getLabel() + " = " +
+		// // shape.getBody());
+		// System.out.println(shape.getLabel());
+		// }
+		//
+		// }
 		//
 		// for (Gisgraphs g : listAll)
 		// {

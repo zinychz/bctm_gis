@@ -26,9 +26,12 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.springframework.context.annotation.Scope;
+
 @Named("routeProperty")
 //@SessionScoped
-@ViewScoped
+//@ViewScoped
+@Scope("session") //need this, JSR-330 in Spring context is singleton by default
 public class RoutePropertyBean implements Serializable
 {
 	@Inject

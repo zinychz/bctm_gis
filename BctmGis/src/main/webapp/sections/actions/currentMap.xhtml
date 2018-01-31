@@ -19,7 +19,10 @@
 			<legend>Текущий объект на карте</legend>
 
 			<h:panelGrid columns="2" style="margin:0; height: 15px;">
+
 				<h:outputText value="Автоматически искать ТМЦ" />
+				<!--<h:outputText value="#{session.id}" />-->
+
 				<h:selectBooleanCheckbox id="synchronizedSpec"
 					value="#{mapFind.synchronizedSpec}">
 					<a4j:ajax event="click" />
@@ -30,21 +33,55 @@
 
 				<rich:tree id="currentSelection" nodeType="#{node.type}" var="node"
 					status="ajaxStatus" value="#{mapFind.currentSelection}"
-					toggleType="ajax" selectionType="client">
+					toggleType="ajax" selectionType="client" rowKeyVar="rowKey"
+					rowKeyConverter="#{integerSequenceRowKeyConverter}">>
+
 					<rich:treeNode iconClass="displayNone" type="gisgraph">
-						<h:outputLink value="#"
-							onclick="getShapeFromLinkAndFocus(#{node.gisgraphId}); return false;">
-									#{node.name}
-								</h:outputLink>
+						<a4j:outputPanel>
+
+							<h:outputLink value="#"
+								onclick="getShapeFromLinkAndFocus(#{node.gisgraphId}); return false;">#{node.name}</h:outputLink>
+							<h:outputLink value="#" title="Разгруппировать"
+								style="color:red; padding: 0px 5px;"
+								rendered="#{(rowKey.toString().indexOf('[0]') lt 0) and (fn:length(rowKey.toString().substring(rowKey.toString().indexOf('[') + 1, rowKey.toString().indexOf(']')).split(',')) eq 3)}"
+								onclick="ungroup('#{rowKey.toString().substring(rowKey.toString().indexOf('[') + 1, rowKey.toString().indexOf(']'))}', #{node.gisgraphId}); return false;">
+									(-)
+							</h:outputLink>
+
+							<rich:dragSource type="#{node.type}" dragValue="#{node}"
+								dragIndicator="indicatorDnD" />
+							<rich:dropTarget acceptedTypes="group objectInGroup"
+								dropListener="#{dndeventtree.processDrop}" dropValue="#{node}"
+								render="currentSelection dataGridFoundTree" />
+
+						</a4j:outputPanel>
 					</rich:treeNode>
 					<rich:treeNode iconLeaf="org.richfaces/node_icon.gif"
 						iconClass="rf-trn-ico" type="objectInGroup">
+						<a4j:outputPanel>
                     			#{node.name}
-                			</rich:treeNode>
+                    			
+                    		<rich:dragSource type="#{node.type}"
+								dragValue="#{node}" dragIndicator="indicatorDnD" />
+							<rich:dropTarget acceptedTypes="gisgraph"
+								dropListener="#{dndeventtree.processDrop}" dropValue="#{node}"
+								render="currentSelection dataGridFoundTree" />
+
+						</a4j:outputPanel>
+					</rich:treeNode>
 					<rich:treeNode iconLeaf="org.richfaces/node_icon.gif"
 						iconClass="rf-trn-ico" type="group">
+						<a4j:outputPanel>
 								#{node.name}
-                			</rich:treeNode>
+								
+							<rich:dragSource type="#{node.type}" dragValue="#{node}"
+								dragIndicator="indicatorDnD" />
+							<rich:dropTarget acceptedTypes="gisgraph"
+								dropListener="#{dndeventtree.processDrop}" dropValue="#{node}"
+								render="currentSelection dataGridFoundTree" />
+
+						</a4j:outputPanel>
+					</rich:treeNode>
 				</rich:tree>
 
 			</div>
