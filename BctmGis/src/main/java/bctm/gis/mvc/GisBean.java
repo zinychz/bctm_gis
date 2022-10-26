@@ -106,7 +106,7 @@ public class GisBean implements Serializable {
 //
 //			Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
 //				protected PasswordAuthentication getPasswordAuthentication() {
-//					return new PasswordAuthentication("zinychz", "pvenf,jh");
+//					return new PasswordAuthentication("zinychz", "************");
 //				}
 //			});
 //			
